@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminauthController;
+use App\Http\Controllers\Admin\DashboardController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,3 +19,10 @@ Route::get('/', function () {
     return view('admin.index');
 });
 
+Route::get('/login', [AdminauthController::class, 'login'])->middleware('guest');
+Route::post('/login', [AdminauthController::class, 'attempting']);
+Route::get('/logout', [AdminauthController::class, 'logout']);
+
+Route::group(['prefix' => 'admin', 'middleware' => 'auth:admin'], function() {
+    Route::get('/dashboard', [DashboardController::class, 'index']);
+});
